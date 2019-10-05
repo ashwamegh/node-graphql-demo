@@ -2,6 +2,7 @@ const express = require("express");
 const { graphql, buildSchema } = require("graphql");
 const ExpressGraphQL = require("express-graphql");
 const sqlite3 = require("sqlite3").verbose();
+const cors = require('cors');
 
 const app = express();
 
@@ -114,5 +115,6 @@ app.use(
   })
 );
 
+app.use(cors());
 app.listen(3000);
 console.log("Server is running onto http://localhost:3000");
