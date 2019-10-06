@@ -9,9 +9,9 @@ const app = express();
 //  Initialize SQLite DB
 const database = new sqlite3.Database("./my.db");
 
-database.runAsync = (sql) => {
+database.runAsync = (sql, params=[]) => {
   return new Promise( (resolve, reject) => {
-    database.run(sql,(err) => {
+    database.run(sql,params,(err) => {
           if (err)
               reject(err);
           else
@@ -63,7 +63,7 @@ const schema = buildSchema(`
   }
 
   type Mutation{
-    createContact(firstName: String, lastName: String, email: String): Contact,
+    createContact(firstName: String!, lastName: String!, email: String!): Contact,
     updateContact(id: ID!, firstName: String, lastName: String, email: String): String,
     deleteContact(id: ID!): String
   }
@@ -107,6 +107,8 @@ const root = {
   }
 };
 
+app.use(cors());
+
 app.use(
   "/graphql",
   ExpressGraphQL({
@@ -115,6 +117,6 @@ app.use(
   })
 );
 
-app.use(cors());
+
 app.listen(3000);
 console.log("Server is running onto http://localhost:3000");
